@@ -1,0 +1,4 @@
+---
+# defaults file for teamspeak-role
+teamspeak_conf:
+  version: '3.0.13.8'

@@ -1,0 +1,9 @@
+---
+# handlers file for teamspeak-role
+- name: restart teamspeak
+  systemd:
+    name: '{{ item }}'
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+  with_items: '{{ teamspeak.services }}'

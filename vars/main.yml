@@ -1,0 +1,8 @@
+---
+# vars file for teamspeak-role
+teamspeak:
+  jdkroot: '/opt/teamspeak'
+  installdir: '/usr/share/teamspeak-{{ teamspeak_conf.version }}'
+  download_url: 'http://ftp.4players.de/pub/hosted/ts3/releases/{{ teamspeak_conf.version }}/teamspeak3-server_linux_amd64-{{ teamspeak_conf.version }}.tar.bz2'
+  services:
+    - teamspeak-server

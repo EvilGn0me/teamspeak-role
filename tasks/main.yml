@@ -1,0 +1,46 @@
+---
+# tasks file for teamspeak-role
+- user:
+    name: ts3server
+    comment: "Teamspeak 3 server user"
+
+- name: create dirs
+  file:
+    path: '{{ item }}'
+    state: directory
+    owner: ts3server
+    group: ts3server
+  with_items:
+    - '{{ teamspeak.installdir }}'
+
+- name: download teamspeak
+  unarchive:
+    src: '{{ teamspeak.download_url }}'
+    dest: '{{ teamspeak.installdir }}'
+    creates: '{{ teamspeak.installdir }}/ts3server'
+    extra_opts: [--strip-components=1]
+    remote_src: yes
+  notify: 'restart teamspeak'
+
+- name: manage teamspeak alternatives
+  alternatives:
+    name: teamspeak
+    link: '{{ teamspeak.jdkroot }}'
+    path: '{{ teamspeak.installdir }}'
+
+- name: manage systemd service
+  template:
+    src: "templates/teamspeak-server.service"
+    dest: "/etc/systemd/system/teamspeak-server.service"
+    owner: root
+    group: root
+    mode: 0644
+  notify: 'restart teamspeak'
+
+- name: ensure strider running
+  systemd:
+    name: '{{ item }}'
+    state: started
+    enabled: yes
+    daemon_reload: yes
+  with_items: '{{ teamspeak.services }}'
